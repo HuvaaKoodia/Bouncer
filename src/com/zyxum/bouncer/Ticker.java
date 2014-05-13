@@ -58,25 +58,6 @@ public class Ticker {
 	}
 	
 	public int getTick(){
-		if(Game.intro==0) return 450;
-		if(Game.intro==1) return 400;
-		if(Game.intro==2 && Game.healthshake<0) return 10000;
-		else if(Game.intro==2) return 700;
-		
-		if(Game.intro==3){
-			switch(Game.xplevel){
-				case 1: return 650;
-				case 2: return 600;
-				case 3: return 550;
-				case 4: return 500;
-				case 5: return 475;
-				case 6: return 450;
-				case 7: return 425;
-				case 8: return 400;
-				default: return 400;
-			}
-		}
-		
-		return 700;
+		return 450;
 	}
 }

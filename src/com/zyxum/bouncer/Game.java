@@ -51,10 +51,8 @@ public class Game implements GameState{
 		shake=0;
 		offset_x=0;
 		offset_y=0;
-		
-		save=new File("save");
-		if(save.exists()) intro=3;
-		else intro=0; //TODO debug
+
+
 		
 		random=new Random();
 		player=new Player(Bouncer.WIDTH/2-16,Bouncer.HEIGHT/2-16);
@@ -90,31 +88,23 @@ public class Game implements GameState{
 			new Message(Bouncer.WIDTH/2-128, Bouncer.HEIGHT/2-32, 256, 64, "Move with arrow keys and", "avoid rocks (blue things)!");
 			new Message(Bouncer.WIDTH/2-128, Bouncer.HEIGHT/2-32, 256, 64, "In bouncer,", "you bounce constantly.");
 			new Message(Bouncer.WIDTH/2-128, Bouncer.HEIGHT/2-32, 256, 64, "Hello, and welcome", "to Bouncer!");
-		}else if(intro==3 && first){
-			new Message(Bouncer.WIDTH/2-128, Bouncer.HEIGHT/2-32, 256, 64, "", "Welcome back!");
-			first=false;
 		}
 	}
 
 	@Override public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException{		
-		for(int i=-32;i<Bouncer.WIDTH+32;i+=32) for(int j=-32;j<Bouncer.HEIGHT+32;j+=32)
-			if((intro==1 && !Particle.msg.isActive()) || intro>=2) g.drawImage(back, offset_x+i, offset_y+j);
 		
 		player.render(g);
 		
 		g.setColor(Color.blue);
 		for(Particle particle : Particle.getInstances()){
-			if(particle.x>-32 && particle.x<Bouncer.WIDTH+32 && particle.deadtick<5000) if((intro==1 && !Particle.msg.isActive()) || intro>=2)
-				g.drawImage(rock, offset_x+particle.x, offset_y+particle.y);
-			else g.fillOval(offset_x+particle.x, offset_y+particle.y, 16, 16);
+			if(particle.x>-32 && particle.x<Bouncer.WIDTH+32 && particle.deadtick<5000)
+				g.fillOval(offset_x+particle.x, offset_y+particle.y, 16, 16);
 		}
 		
 		for(Wall wall : Wall.getInstances()){
-			if((intro==1 && !Particle.msg.isActive()) || intro>=2) g.drawImage(back, offset_x+wall.x, offset_y+wall.y);
-			else{
+			
 				g.setColor(Color.black);
 				g.fillRect(offset_x+wall.x, offset_y+wall.y, 32, 32);
-			}
 		}
 		
 		g.setColor(Color.white);
@@ -124,9 +114,6 @@ public class Game implements GameState{
 				g.drawString(""+qteBlock.mones, offset_x+qteBlock.x+8, offset_y+qteBlock.y+8);
 			}
 		}
-		
-		if(intro>1 || (intro==1 && !Particle.msg.isActive())) Hud.render(g);
-		if(intro>=2) Hud.mouseOver(gc.getInput().getMouseX(), gc.getInput().getMouseY(), g);
 		
 		if(player.useup){
 			g.setColor(new Color(255,0,0,0.5F));
@@ -139,11 +126,7 @@ public class Game implements GameState{
 		
 		if(deathmsg != null && deathmsg.isActive()){
 			g.setColor(Color.black);
-			g.drawString("XP: "+(((xplevel-1)*Bouncer.WIDTH)+xp), Bouncer.WIDTH/2-120, Bouncer.HEIGHT/2-80);
-			g.drawString("Longest Streak: "+player.maxstreak, Bouncer.WIDTH/2-120, Bouncer.HEIGHT/2-64);
-			g.drawString("Abilities Used: "+abilitycounter, Bouncer.WIDTH/2-120, Bouncer.HEIGHT/2-48);
-			g.drawString("QTEs Done: "+qtecounter, Bouncer.WIDTH/2-120, Bouncer.HEIGHT/2-32);
-			g.drawString("QTEs Failed: "+qtefailcounter, Bouncer.WIDTH/2-120, Bouncer.HEIGHT/2-16);
+			g.drawString("Points: "+xp, Bouncer.WIDTH/2-60, Bouncer.HEIGHT/2-0);
 		}
 	}
 
@@ -152,15 +135,11 @@ public class Game implements GameState{
 		for(Message message : Message.getInstances()) if(message.isActive()) tempMessageActive=true;
 		if(!tempMessageActive) pause=false;
 		
-		if(intro==3 && !save.exists()) try{save.createNewFile();}catch (IOException e){e.printStackTrace();}
-		
 		if(!pause){
 			public_delta=delta;
 			
 			if(intro==0) app.setShowFPS(true);
 			else app.setShowFPS(false);
-			
-			if(intro>3) intro=3;
 			
 			if(!gc.getInput().isKeyDown(Input.KEY_LEFT) && !gc.getInput().isKeyDown(Input.KEY_RIGHT)
 					&& !gc.getInput().isKeyDown(Input.KEY_UP) && !gc.getInput().isKeyDown(Input.KEY_DOWN)) afk=true;
@@ -185,38 +164,19 @@ public class Game implements GameState{
 				gc.reinit();
 			}
 			
-			if(health<=0 && intro==3){
+			if(health<=0){
 				health=0;
-				if(!deathsound && !snd_death.isPlaying()){
-					if(player.usedown) snd_death.playAsSoundEffect(1.0F, 0.7F, false);
-					else snd_death.playAsSoundEffect(1.0F/4, 0.7F, false);
-					deathsound=true;
-				}else{
-					if(deathmsg==null){
-						deathmsg=new Message(Bouncer.WIDTH/2-128, Bouncer.HEIGHT/2-128, 256, 256, "You died!", "------");
-						for(Particle particle : Particle.getInstances()){
-							if(particle.dir==1) particle.x=Bouncer.WIDTH+64;
-							else particle.x=-64;
-						}
-						health=150;
-					}
+				deathmsg=new Message(Bouncer.WIDTH/2-128, Bouncer.HEIGHT/2-48, 256, 96, "Gameover!", "Try again");
+				for(Particle particle : Particle.getInstances()){
+					if(particle.dir==1) particle.x=Bouncer.WIDTH+64;
+					else particle.x=-64;
 				}
-			}
-			
-			if(shake>0 && intro>=2){
-				offset_x=shakeArray[random.nextInt(shakeArray.length)];
-				offset_y=shakeArray[random.nextInt(shakeArray.length)];
-				shake--;
-			}else{
-				offset_x=0;
-				offset_y=0;
-			}
-			
-			if(xp>Bouncer.WIDTH && intro>=2){
-				xp=1;
-				xplevel++;
-				if(Game.player.usedown) snd_lvlup.playAsSoundEffect(1.0F/4, 1.0F, false);
-				else snd_lvlup.playAsSoundEffect(1.0F, 1.0F, false);
+				health=150;
+				
+				Game.player.useup=true;
+				Game.player.up_pos_x=Bouncer.WIDTH/2;
+				Game.player.up_pos_y=Bouncer.HEIGHT/2;
+				Game.player.hspeed=0;
 			}
 			
 			player.update(delta);

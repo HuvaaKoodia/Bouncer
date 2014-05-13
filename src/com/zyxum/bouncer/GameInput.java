@@ -21,23 +21,6 @@ public class GameInput{
 		}
 		
 		if(!Game.pause){
-			if(Game.intro>=2){
-				if(key==Input.KEY_UP && !Game.player.useup && Ability.up_coolleft<=0){
-					Game.abilitycounter++;
-					Game.player.useup=true;
-					Game.player.up_pos_x=Game.player.x-Bouncer.WIDTH;
-					Game.player.up_pos_y=Game.player.y;
-					Game.player.up_size=0;
-					Ability.up_coolleft=Ability.up_cool;
-				}
-				
-				if(key==Input.KEY_DOWN && !Game.player.usedown && Ability.down_coolleft<=0){
-					Game.abilitycounter++;
-					Game.player.usedown=true;
-					Ability.down_coolleft=Ability.down_cool;
-					Game.player.down_time=20;
-				}
-			}
 			
 			if(key==Input.KEY_LEFT) Game.player.hspeed=-1;
 			if(key==Input.KEY_RIGHT) Game.player.hspeed=1;

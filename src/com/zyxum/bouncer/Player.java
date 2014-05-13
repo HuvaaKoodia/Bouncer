@@ -46,36 +46,10 @@ public class Player {
 	}
 	
 	public void render(Graphics g){
-		if(Game.intro>=1){
-			if(Game.intro>=2){
-				if(Ability.p_coolleft<=0){
-					g.setColor(Color.blue);
-					g.drawOval(x-Bouncer.WIDTH-16, y-16, 64, 64);
-					g.setColor(new Color(0,0,255,0.2F));
-					g.fillOval(x-Bouncer.WIDTH-16, y-16, 64, 64);
-					
-					g.setColor(Color.blue);
-					g.drawOval(x-16, y-16, 64, 64);
-					g.setColor(new Color(0,0,255,0.2F));
-					g.fillOval(x-16, y-16, 64, 64);
-					
-					g.setColor(Color.blue);
-					g.drawOval(x+Bouncer.WIDTH-16, y-16, 64, 64);
-					g.setColor(new Color(0,0,255,0.2F));
-					g.fillOval(x+Bouncer.WIDTH-16, y-16, 64, 64);
-				}
-			}
-			
 			g.setColor(Color.red);
 			g.fillRect(Game.offset_x+x, Game.offset_y+y, 32, 32);
 			g.fillRect(Game.offset_x+x+Bouncer.WIDTH, Game.offset_y+y, 32, 32);
 			g.fillRect(Game.offset_x+x-Bouncer.WIDTH, Game.offset_y+y, 32, 32);
-		}else if(Game.intro==0){
-			g.setColor(Color.red);
-			g.fillRect(Game.offset_x+x, Game.offset_y+y, 32, 32);
-			g.fillRect(Game.offset_x+x+Bouncer.WIDTH, Game.offset_y+y, 32, 32);
-			g.fillRect(Game.offset_x+x-Bouncer.WIDTH, Game.offset_y+y, 32, 32);
-		}
 	}
 	
 	public void update(int delta){

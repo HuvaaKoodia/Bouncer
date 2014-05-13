@@ -12,35 +12,6 @@ public class Hud{
 	}
 	
 	public static void render(Graphics g){
-		//xp bar
-		if(Game.intro>=2){
-			g.setColor(new Color(0, 0, 255, 0.3F));
-			g.fillRect(Game.xp, 0, Bouncer.WIDTH, 8);
-			
-			g.setColor(new Color(0, 0, 255, 0.8F));
-			g.fillRect(0, 0, Game.xp, 8);
-			
-			g.setColor(Color.green);
-			g.drawString("LVL "+Game.xplevel, Bouncer.WIDTH/2-24, 0);
-		}
-		
-		//health bar
-		if(Game.deathmsg != null && Game.deathmsg.isActive()) {
-			g.setColor(new Color(255, 0, 0, 0.3F));
-			g.fillRect(0, Bouncer.HEIGHT-8, Bouncer.WIDTH, 8);
-			
-			g.setColor(Color.green);
-			g.drawString("HP 0", Bouncer.WIDTH/2-32, Bouncer.HEIGHT-16);
-		}else{
-			g.setColor(new Color(255, 0, 0, 0.3F));
-			g.fillRect(0, Bouncer.HEIGHT-8, Bouncer.WIDTH, 8);
-			
-			g.setColor(new Color(255, 0, 0, 0.8F));
-			g.fillRect(0, Bouncer.HEIGHT-8, (int) (Game.health*4.8), 8);
-			
-			g.setColor(Color.green);
-			g.drawString("HP "+Game.health, Bouncer.WIDTH/2-32, Bouncer.HEIGHT-16);
-		}
 		
 		//debug info
 		if(Bouncer.debug){
@@ -50,69 +21,6 @@ public class Hud{
 			g.drawString("AFK Time: "+Game.afktimer, 16, 64);
 			g.drawString("Intro: "+Game.intro, 16, 80);
 			g.drawString("getTick: "+Game.ticker.getTick(), 16, 96);
-		}
-		
-		if(Game.intro>=2){
-			//abilities
-			g.setColor(new Color(255,255,255,0.5F));
-			g.fillRect(Bouncer.WIDTH/2-48, 16, 96, 32);
-			
-			if(Ability.p_coolleft>0){
-				g.setColor(Color.darkGray);
-				g.fillRect(Bouncer.WIDTH/2-48, 16, 32, 32);
-			}
-			
-			if(Ability.up_coolleft>0){
-				g.setColor(Color.darkGray);
-				g.fillRect(Bouncer.WIDTH/2-16, 16, 32, 32);
-			}
-			
-			if(Ability.down_coolleft>0){
-				g.setColor(Color.darkGray);
-				g.fillRect(Bouncer.WIDTH/2+16, 16, 32, 32);
-			}
-			
-			g.setColor(new Color(255,255,255,0.8F));
-			g.drawRect(Bouncer.WIDTH/2-48, 16, 32, 32);
-			g.drawRect(Bouncer.WIDTH/2-16, 16, 32, 32);
-			g.drawRect(Bouncer.WIDTH/2+16, 16, 32, 32);
-			
-			//ability icons
-			g.setColor(Color.black);
-			g.drawString("Sh", Bouncer.WIDTH/2-36, 32);
-			
-			g.drawString("Up", Bouncer.WIDTH/2-14, 16);
-			g.drawString("Sw", Bouncer.WIDTH/2-4, 32);
-			
-			g.drawString("Dwn", Bouncer.WIDTH/2+16, 16);
-			g.drawString("Ts", Bouncer.WIDTH/2+30, 32);
-			
-			//ability cools
-			if(Ability.p_coolleft>0){
-				g.setColor(new Color(255,255,255,0.5F));
-				g.fillRect(Bouncer.WIDTH/2-48, 48, 32, 16);
-				g.setColor(Color.black);
-				g.drawString(""+Ability.p_coolleft, Bouncer.WIDTH/2-40, 48);
-			}
-			
-			if(Ability.up_coolleft>0){
-				g.setColor(new Color(255,255,255,0.5F));
-				g.fillRect(Bouncer.WIDTH/2-16, 48, 32, 16);
-				g.setColor(Color.black);
-				g.drawString(""+Ability.up_coolleft, Bouncer.WIDTH/2-8, 48);
-			}
-			
-			if(Ability.down_coolleft>0){
-				g.setColor(new Color(255,255,255,0.5F));
-				g.fillRect(Bouncer.WIDTH/2+16, 48, 32, 16);
-				if(!Game.player.usedown){
-					g.setColor(Color.black);
-					g.drawString(""+Ability.down_coolleft, Bouncer.WIDTH/2+24, 48);
-				}else{
-					g.setColor(Color.red);
-					g.drawString(""+Game.player.down_time, Bouncer.WIDTH/2+24, 48);
-				}
-			}
 		}
 	}
 	
